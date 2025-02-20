@@ -33,9 +33,11 @@
         margin-bottom: 10px;
       }
     </style>
+    <!-- Include Plotly from CDN -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   </head>
   <body>
-    <h1>FastAPI API Demo - Contacts</h1>
+    <h1>Express API Demo - Contacts</h1>
 
     <button id="load-contacts">Load Contacts</button>
 
@@ -55,6 +57,9 @@
         <!-- Rows will be populated here -->
       </tbody>
     </table>
+
+    <h2>Age Distribution Histogram</h2>
+    <div id="histogram"></div>
 
     <h2>Add New Contact</h2>
     <form id="add-contact-form">

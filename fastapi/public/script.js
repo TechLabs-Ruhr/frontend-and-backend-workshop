@@ -24,14 +24,23 @@ function loadContacts() {
       return response.json();
     })
     .then((data) => {
-      const tbody = document.querySelector("#contacts-table tbody");
-      if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6">No contacts found.</td></tr>';
-        return;
-      }
-      tbody.innerHTML = data
-        .map(
-          (contact) => `
+      populateContactsTable(data);
+      plotHistogram(data);
+    })
+    .catch((err) => {
+      displayError(err.message);
+    });
+}
+
+function populateContactsTable(contacts) {
+  const tbody = document.querySelector("#contacts-table tbody");
+  if (contacts.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6">No contacts found.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = contacts
+    .map(
+      (contact) => `
         <tr>
           <td>${contact.id}</td>
           <td>${contact.firstName}</td>
@@ -44,12 +53,8 @@ function loadContacts() {
           </td>
         </tr>
       `
-        )
-        .join("");
-    })
-    .catch((err) => {
-      displayError(err.message);
-    });
+    )
+    .join("");
 }
 
 function addContact(event) {
@@ -111,4 +116,25 @@ function deleteContact(contactId) {
     .catch((err) => {
       displayError(err.message);
     });
+}
+
+function plotHistogram(contacts) {
+  const ages = contacts.map((contact) => contact.age);
+  const data = [
+    {
+      x: ages,
+      type: "histogram",
+      xbins: {
+        start: 0,
+        end: 100,
+        size: 10,
+      },
+    },
+  ];
+  const layout = {
+    title: "Age Distribution",
+    xaxis: { title: "Age" },
+    yaxis: { title: "Count" },
+  };
+  Plotly.newPlot("histogram", data, layout);
 }
